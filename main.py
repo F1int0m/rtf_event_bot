@@ -10,14 +10,14 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
 
+@dp.message_handler()
 async def text_contains_any_handler(message: types.Message):
-    print(f'Got {message.text=} from {message.from_user.username=}')
     log.info(f'Got {message.text=} from {message.from_user.username=}')
-    await message.answer('きっと勝つ')
+    if any(x in message.text for x in check_texts):
+        await message.answer('きっと勝つ')
+    else:
+        await message.answer('Неверно')
 
-
-for i in check_texts:
-    dp.message_handler(text_contains=i)(text_contains_any_handler)
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
